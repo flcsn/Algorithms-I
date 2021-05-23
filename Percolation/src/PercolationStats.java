@@ -1,13 +1,12 @@
 import edu.princeton.cs.algs4.StdStats;
 import edu.princeton.cs.algs4.StdRandom;
-import java.lang.Math;
 
 public class PercolationStats {
-	private double[] percolationThresholds;
-	private double CONFIDENCE_95 = 1.96; 
+	private final double[] percolationThresholds;
+	private static final double CONFIDENCE_95 = 1.96; 
 
     // perform independent trials on an n-by-n grid
-    public PercolationStats(int n, int trials) throws Exception {
+    public PercolationStats(int n, int trials) {
     	if (n <= 0 || trials <= 0) {
     		throw new IllegalArgumentException("N or trials must be greater than 0");
     	}
@@ -16,9 +15,11 @@ public class PercolationStats {
     	for (int i = 0; i < trials; i++) {
     		Percolation percolation = new Percolation(n);
     		while (!percolation.percolates()) {
-    			percolation.open(StdRandom.uniform(1, n+1), StdRandom.uniform(1, n+1));
+    			int rowToOpen = StdRandom.uniform(1, n+1);
+    			int colToOpen = StdRandom.uniform(1, n+1);
+    			percolation.open(rowToOpen, colToOpen);
     		}
-    		percolationThresholds[i] = percolation.numberOfOpenSites()/n*n;
+    		percolationThresholds[i] = (1.0*percolation.numberOfOpenSites())/(1.0*n*n);
     	}
     }
 
@@ -43,7 +44,7 @@ public class PercolationStats {
     }
 
    // test client (see below)
-   public static void main(String[] args) throws Exception {
+   public static void main(String[] args) {
 	   int n = Integer.parseInt(args[0]);
 	   int T = Integer.parseInt(args[1]);
 	   
