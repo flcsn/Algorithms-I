@@ -2,6 +2,7 @@
 public class Percolation {
 	private boolean[][] grid;
 	private int[] sites;
+	private int[] size;
 	private final int N;
 	private int openSites;
 	
@@ -14,8 +15,8 @@ public class Percolation {
     	N = n;
     	openSites = 0;
     	grid = new boolean[N][N];
-    	sites = new int[N*N];
     	
+    	sites = new int[N*N];
     	for (int i = 0; i < sites.length; i++) {
     		// Initializes all top row sites to have the same root
     		if (i < N) {
@@ -24,6 +25,11 @@ public class Percolation {
     			sites[i] = i;
     		}
     	}
+    	
+    	size = new int[N*N];
+    	for (int j = 0; j < size.length; j++) {
+    		size[j] = 1;
+    	}
     }
     
     private int root(int index) {
@@ -31,6 +37,7 @@ public class Percolation {
     		if (sites[index] == 0) {
     			break;
     		}
+    		sites[index] = sites[sites[index]];
     		index = sites[index];
     	}
     	
@@ -41,10 +48,12 @@ public class Percolation {
     	int site1Root = root(site1);
     	int site2Root = root(site2);
     	
-    	if (site1Root == 0) {
+    	if (site1Root == 0 || size[site1Root] > size[site2Root]) {
     		sites[site2Root] = site1Root;
+    		size[site1Root] += size[site2Root];
     	} else {
     		sites[site1Root] = site2Root;
+    		size[site2Root] += size[site1Root];
     	}
     }
     
