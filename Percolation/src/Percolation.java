@@ -15,6 +15,7 @@ public class Percolation {
     	N = n;
     	openSites = 0;
     	grid = new boolean[N][N];
+    	size = new int[N*N];
     	
     	sites = new int[N*N];
     	for (int i = 0; i < sites.length; i++) {
@@ -24,11 +25,7 @@ public class Percolation {
     		} else {
     			sites[i] = i;
     		}
-    	}
-    	
-    	size = new int[N*N];
-    	for (int j = 0; j < size.length; j++) {
-    		size[j] = 1;
+    		size[i] = 1;
     	}
     }
     
