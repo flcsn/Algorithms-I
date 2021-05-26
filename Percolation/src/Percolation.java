@@ -20,20 +20,15 @@ public class Percolation {
     	sites = new int[N*N];
     	for (int i = 0; i < sites.length; i++) {
     		// Initializes all top row sites to have the same root
-    		if (i < N) {
-    			sites[i] = 0;
-    		} else {
-    			sites[i] = i;
-    		}
+    		if (i < N) sites[i] = 0;
+    		else sites[i] = i;
     		size[i] = 1;
     	}
     }
     
     private int root(int index) {
     	while (sites[index] != index) {
-    		if (sites[index] == 0) {
-    			break;
-    		}
+    		if (sites[index] == 0) break;
     		sites[index] = sites[sites[index]];
     		index = sites[index];
     	}
@@ -59,9 +54,7 @@ public class Percolation {
     }
     
     private boolean isWithinGrid(int row, int col) {
-    	if (row < 1 || row > N || col < 1 || col > N) {
-    		return false;
-    	}
+    	if (row < 1 || row > N || col < 1 || col > N) return false;
     	return true;
     }
     
@@ -100,13 +93,8 @@ public class Percolation {
     
     // opens the site (row, col) if it is not open already
     public void open(int row, int col) {
-    	if (!isWithinGrid(row, col)) {
-    		throw new IllegalArgumentException("Parameters must be between [1, N]");
-    	}
-    	
-    	if (isOpen(row, col)) {
-    		return;
-    	}
+    	if (!isWithinGrid(row, col)) throw new IllegalArgumentException("Parameters must be between [1, N]");
+    	if (isOpen(row, col)) return;
     	
     	grid[row-1][col-1] = true;
     	openSites++;
@@ -118,23 +106,14 @@ public class Percolation {
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {  
-    	if (!isWithinGrid(row, col)) {
-    		throw new IllegalArgumentException("Parameters must be between [1, N]");
-    	}
-    	
+    	if (!isWithinGrid(row, col)) throw new IllegalArgumentException("Parameters must be between [1, N]");
     	return grid[row-1][col-1];
     }
     
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
-    	if (!isWithinGrid(row, col)) {
-    		throw new IllegalArgumentException("Parameters must be between [1, N]");
-    	}
-    	
-    	if (!isOpen(row, col)) {
-    		return false;
-    	}
-    	
+    	if (!isWithinGrid(row, col)) throw new IllegalArgumentException("Parameters must be between [1, N]");
+    	if (!isOpen(row, col)) return false;
     	int siteIndex = convertRowAndColToSiteIndex(row-1, col-1);
     	return root(siteIndex) == 0;
     }
@@ -144,15 +123,11 @@ public class Percolation {
     }
     // does the system percolate?
     public boolean percolates() {
-    	if (openSites == 0) {
-    		return false;
-    	}
+    	if (openSites == 0) return false;
     	
     	for (int i = 0; i < N; i++) {
     		int bottomRowSite = convertRowAndColToSiteIndex(N-1, i);
-    		if (root(bottomRowSite) == 0) {
-    			return true;
-    		}
+    		if (root(bottomRowSite) == 0) return true;
     	}
     	return false;
     	
