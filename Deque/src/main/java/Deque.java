@@ -107,6 +107,7 @@ public class Deque<Item> implements Iterable<Item> {
 		Iterator<String> iterator = deque.iterator();
 		while (iterator.hasNext()) { System.out.print(iterator.next() + " ");}
 		System.out.println("");
+		System.out.println("Removing...");
 		System.out.println("At front: " + deque.removeFirst());
 		System.out.println("At end: " + deque.removeLast());
 		System.out.println("The deque now has " + deque.size() + " nodes.");
