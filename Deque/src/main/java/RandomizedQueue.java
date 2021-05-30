@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -45,7 +44,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public Item dequeue() {
     	if (this.isEmpty()) throw new NoSuchElementException("queue is empty");
     	int indexToRemove = StdRandom.uniform(items.length);
-    	while (items[indexToRemove]== null) indexToRemove = StdRandom.uniform(items.length);
+    	while (items[indexToRemove] == null) indexToRemove = StdRandom.uniform(items.length);
     	Item item = items[indexToRemove];
     	items[indexToRemove] = null;
     	
@@ -71,17 +70,18 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     	private Item[] itemsCopy = (Item[]) new Object[items.length];
     	
     	private RandomizedQueueIterator() {
-    		for (int i = 0; i < items.length; i++) { itemsCopy[i] = items[i];}
+    		for (int i = 0; i < items.length; i++) { itemsCopy[i] = items[i]; }
     	}
     	
     	public boolean hasNext() {
     		if (counter != numberOfItems) return true;
-    		else return false;
+    		return false;
     	}
     	public void remove() { throw new UnsupportedOperationException(); }
     	public Item next() {
+    		if (!hasNext()) throw new NoSuchElementException("queue is empty");
     		int indexToRemove = StdRandom.uniform(itemsCopy.length);
-        	while (itemsCopy[indexToRemove]== null) indexToRemove = StdRandom.uniform(itemsCopy.length);
+        	while (itemsCopy[indexToRemove] == null) indexToRemove = StdRandom.uniform(itemsCopy.length);
         	Item item = itemsCopy[indexToRemove];
         	itemsCopy[indexToRemove] = null;
         	counter++;
@@ -102,7 +102,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 		System.out.println("");
 		System.out.println("Chosen randomly, this queue has the following elements: ");
 		Iterator<String> iterator = q.iterator();
-		while (iterator.hasNext()) { System.out.print(iterator.next() + " ");}
+		while (iterator.hasNext()) { System.out.print(iterator.next() + " "); }
 		System.out.println("");
 		System.out.println("Removing...");
 		System.out.println(q.dequeue());

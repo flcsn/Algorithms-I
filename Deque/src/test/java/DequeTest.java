@@ -109,7 +109,9 @@ public class DequeTest {
 		assertTrue(iterator.next().equals("first"));
 		assertTrue(iterator.next().equals("second"));
 		assertTrue(iterator.next().equals("third"));
-		assertNull(iterator.next());
+		assertThrows(NoSuchElementException.class, () -> {
+			iterator.next();
+		});
 	}
 	
 	@Test
