@@ -2,13 +2,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class BruteCollinearPointsTest {
+public class FastCollinearPointsTest {
 	
 	@Test
 	public void nullConstructorParameterThrowsException() {
 		Point[] points = null;
 		assertThrows(IllegalArgumentException.class, () -> {
-			BruteCollinearPoints brute = new BruteCollinearPoints(points);
+			FastCollinearPoints fast = new FastCollinearPoints(points);
 		});
 	}
 	
@@ -20,7 +20,7 @@ public class BruteCollinearPointsTest {
 		Point d = new Point(3,3);
 		Point[] points = {a, b, c, d};
 		assertThrows(IllegalArgumentException.class, () -> {
-			BruteCollinearPoints brute = new BruteCollinearPoints(points);
+			FastCollinearPoints fast = new FastCollinearPoints(points);
 		});
 	}
 	
@@ -31,8 +31,8 @@ public class BruteCollinearPointsTest {
 		Point c = new Point(2,2);
 		Point d = new Point(3,3);
 		Point[] points = {a, b, c, d};
-		BruteCollinearPoints brute = new BruteCollinearPoints(points);
-		assertTrue(brute.numberOfSegments() == 1);
+		FastCollinearPoints fast = new FastCollinearPoints(points);
+		assertTrue(fast.numberOfSegments() == 1);
 	}
 	
 	@Test
@@ -42,8 +42,8 @@ public class BruteCollinearPointsTest {
 		Point c = new Point(7,5);
 		Point d = new Point(9,1);
 		Point[] points = {a, b, c, d};
-		BruteCollinearPoints brute = new BruteCollinearPoints(points);
-		assertTrue(brute.numberOfSegments() == 0);
+		FastCollinearPoints fast = new FastCollinearPoints(points);
+		assertTrue(fast.numberOfSegments() == 0);
 	}
 
 }
