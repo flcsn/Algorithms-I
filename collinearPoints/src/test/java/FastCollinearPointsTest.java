@@ -45,5 +45,17 @@ public class FastCollinearPointsTest {
 		FastCollinearPoints fast = new FastCollinearPoints(points);
 		assertTrue(fast.numberOfSegments() == 0);
 	}
+	
+	@Test
+	public void fiveHorizontalCollinearPointsAddsOneLineSegment() {
+		Point a = new Point(0,1);
+		Point b = new Point(1,1);
+		Point c = new Point(2,1);
+		Point d = new Point(3,1);
+		Point e = new Point(4,1);
+		Point[] points = {a, b, c, d, e};
+		FastCollinearPoints fast = new FastCollinearPoints(points);
+		assertTrue(fast.numberOfSegments() == 1);
+	}
 
 }
