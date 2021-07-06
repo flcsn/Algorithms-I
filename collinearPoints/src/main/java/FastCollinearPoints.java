@@ -1,30 +1,41 @@
 import java.util.Arrays;
+
+import edu.princeton.cs.algs4.In;
+
 import java.util.ArrayList;
 
 public class FastCollinearPoints {
 	private ArrayList<LineSegment> lineSegments;
-	private ArrayList<Point> maximalPoints;
+	private ArrayList<Point> maxPoints;
+	private ArrayList<Point> minPoints;
+	private ArrayList<Double> slopes;
 	
 	// finds all line segments containing 4 or more points
 	public FastCollinearPoints(Point[] points) {
 		if (points == null) throw new IllegalArgumentException("argument is null");
 		lineSegments = new ArrayList<>();
-		maximalPoints = new ArrayList<>();
+		maxPoints = new ArrayList<>();
+		minPoints = new ArrayList<>();
+		slopes = new ArrayList<>();
+		
 		Point[] sortedPoints = new Point[points.length];
+		Point[] pointsCopy = new Point[points.length];
 		for (int i = 0; i < points.length; i++) {
 			checkIfNull(points[i]);
 			sortedPoints[i] = points[i];
+			pointsCopy[i] = points[i];
+		}
+		Arrays.sort(pointsCopy);
+		for (int i = 0; i + 1 < pointsCopy.length; i++) {
+			if (pointsCopy[i].compareTo(pointsCopy[i+1]) == 0) throw new IllegalArgumentException("argument contains repeated point");
 		}
 		
 		// determine point p
-		for (int p = 0; p < points.length; p++) {
-			Point origin = points[p];
+		for (int p = 0; p < pointsCopy.length; p++) {
+			Point origin = pointsCopy[p];
 			
 			// for every other point q, sort the points according to the slope made from p
 			Arrays.sort(sortedPoints, origin.slopeOrder());
-			for (int i = 0; i + 1 < sortedPoints.length; i++) {
-				if (sortedPoints[i].compareTo(sortedPoints[i+1]) == 0) throw new IllegalArgumentException("argument contains repeated point");
-			}
 			
 			// compare slope values of adjacent points
 			for (int q = 0; q < sortedPoints.length; q++) {
@@ -75,31 +86,16 @@ public class FastCollinearPoints {
 			if (max.compareTo(sortedPoints[i]) < 0) max = sortedPoints[i];
 		}
 		
-		// checks list of maximal points if would-be Line Segment will produce a duplicate line segment
+		double minToMaxSlope = min.slopeTo(max);
+		boolean inMaxPointsArray = maxPoints.contains(max);
+		boolean inMinPointsArray = minPoints.contains(min);
+		boolean inSlopeArray = slopes.contains(minToMaxSlope);
 		
-		// PROBLEMATIC !! maximal points may be on the array, but line segment between them may not exist (e.g. parallel lines)
-		// try: once you examine an origin point, add it to a "blacklist" array wherein sortedPoints will no longer consider those points
-		// where every origin point will have been examined against every other point in the sortedPoints array
-		// therefore, no need to re-examine old origin points for every new origin points
-		// because newOrigin.slopeTo(oldOrigin) == oldOrigin.slopeTo(newOrigin), which was already done in oldOrigin's loop
-		// maybe also try: sorting the loops by y first before putting it through the whole loop
-		boolean minIsDuplicate = false;
-		boolean maxIsDuplicate = false;
-		boolean lineSegmentIsDuplicate = false;
-		for (int i = 0; i < maximalPoints.size(); i++) {
-			Point maximalPoint = maximalPoints.get(i);
-			if (maximalPoint.compareTo(min) == 0) minIsDuplicate = true;
-			if (maximalPoint.compareTo(max) == 0) maxIsDuplicate = true;
-			if (minIsDuplicate && maxIsDuplicate) {
-				lineSegmentIsDuplicate = true;
-				break;
-			}
-		}
-		
-		if (!lineSegmentIsDuplicate) {
+		if (!inSlopeArray || !inMaxPointsArray || !inMinPointsArray) {
 			lineSegments.add(new LineSegment(min, max));
-			if (!minIsDuplicate) maximalPoints.add(min);
-			if (!maxIsDuplicate) maximalPoints.add(max);
+			if (!inSlopeArray) slopes.add(minToMaxSlope);
+			if (!inMaxPointsArray) maxPoints.add(max);
+			if (!inMinPointsArray) minPoints.add(min);
 		}
 	}
 	
@@ -116,5 +112,24 @@ public class FastCollinearPoints {
 		LineSegment[] copy = new LineSegment[numberOfSegments()];
 		for (int i = 0; i < numberOfSegments(); i++) copy[i] = lineSegments.get(i);
 		return copy; 
+	}
+	
+	public static void main(String[] args) {
+		In in = new In(args[0]);
+		int numberOfPoints = Integer.parseInt(in.readLine());
+		Point[] points = new Point[numberOfPoints];
+		int counter = 0;
+		while (in.hasNextLine()) {
+			String line = in.readLine();
+			String[] coordinates = line.split(" ");
+			int x = Integer.parseInt(coordinates[1]);
+			int y = Integer.parseInt(coordinates[2]);
+			System.out.println("Point's coordinates are (" + x + "," + y + ")");
+			points[counter] = new Point(x, y);
+			counter++;
+		}
+		System.out.println("Created point array with " + counter + " points.");
+		FastCollinearPoints fast = new FastCollinearPoints(points);
+		System.out.println(fast.numberOfSegments() + " line segments found.");
 	}
 }

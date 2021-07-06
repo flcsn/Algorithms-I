@@ -1,6 +1,7 @@
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+ 
 
 public class FastCollinearPointsTest {
 	
@@ -57,5 +58,4 @@ public class FastCollinearPointsTest {
 		FastCollinearPoints fast = new FastCollinearPoints(points);
 		assertTrue(fast.numberOfSegments() == 1);
 	}
-
 }
